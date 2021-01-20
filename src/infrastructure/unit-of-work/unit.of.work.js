@@ -5,11 +5,14 @@ class UnitOfWork{
 
     constructor() {
         this.databaseProvider = new DatabaseProvider();
-        this.clientRepository = new ClientRepository(this.databaseProvider.database);
+        this.databaseProvider.connect().then(() => {
+            this.clientRepository = new ClientRepository(this.databaseProvider.database);
+        });
     }
 
     async start(){
         await this.databaseProvider.connect();
+        this.clientRepository = new ClientRepository(await this.databaseProvider.database);
     }
 
     async complete(work){

@@ -4,8 +4,7 @@ class ClientRepository extends GenericRepository{
 
     constructor(database) {
         super(database);
-        if(this.database !== undefined)
-            this.collection = this.database.collection('CLIENTS');
+        this.collection = this.database.collection('CLIENTS');
     }
 
     async save(client){

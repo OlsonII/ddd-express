@@ -3,17 +3,19 @@ const UnitOfWork = require("../infrastructure/unit-of-work/unit.of.work");
 class RegisterClientService{
 
 
-    constructor() {
-        this.unitOfWork = new UnitOfWork();
+    constructor(unitOfWork) {
+        this.unitOfWork = unitOfWork;
     }
 
     async execute(request){
         try{
-            const clientSearched = this.unitOfWork.clientRepository.findOne(request.identification);
-            if(clientSearched === undefined){
+            const clientSearched = await this.unitOfWork.clientRepository.findOne(request.identification);
+            console.log(clientSearched);
+            if(clientSearched == undefined){
                 await this.unitOfWork.start();
-                const savedDriver = await this.unitOfWork.complete(async () => await this.unitOfWork.clientRepository.save(request));
-                if(savedDriver !== undefined)
+                const savedClient = await this.unitOfWork.complete(async () => await this.unitOfWork.clientRepository.save(request));
+                console.log(savedClient)
+                if(savedClient != undefined)
                     return new RegisterClientResponse('This driver is registered now correctly')
             }
             return new RegisterClientResponse('This driver is registered');
@@ -21,17 +23,6 @@ class RegisterClientService{
             return new RegisterClientResponse('We have problems registering this driver');
         }
     }
-}
-
-class RegisterClientRequest{
-
-    constructor(identification, name, lastName, phone) {
-        this.identification = identification;
-        this.name = name;
-        this.lastName = lastName;
-        this.phone = phone;
-    }
-
 }
 
 class RegisterClientResponse{

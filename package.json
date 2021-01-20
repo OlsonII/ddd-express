@@ -4,7 +4,7 @@
   "description": "experimental project appliying ddd architecture to pure js",
   "main": "index.js",
   "scripts": {
-    "start": "cd ./src && node app.js",
+    "start": "cd ./src && node --trace-deprecation app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Olson",
